@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="39">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Datalogger.h</itemPath>
+      <itemPath>DataloggerRecord.h</itemPath>
+      <itemPath>ImpactPredictor.h</itemPath>
+      <itemPath>RedDotExperiment.h</itemPath>
+      <itemPath>TelemetryCalculator.h</itemPath>
+      <itemPath>TelemetryData.h</itemPath>
+      <itemPath>VCDException.h</itemPath>
+      <itemPath>VideoReader.h</itemPath>
+      <itemPath>VideoWriter.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Datalogger.cc</itemPath>
+      <itemPath>DataloggerRecord.cc</itemPath>
+      <itemPath>ImpactPredictor.cc</itemPath>
+      <itemPath>main.cc</itemPath>
+      <itemPath>RedDotExperiment.cc</itemPath>
+      <itemPath>StereoCamera.cc</itemPath>
+      <itemPath>StereoCamera.h</itemPath>
+      <itemPath>StereoImage.cc</itemPath>
+      <itemPath>StereoImage.h</itemPath>
+      <itemPath>StereoSampleCode.c</itemPath>
+      <itemPath>TelemetryCalculator.cc</itemPath>
+      <itemPath>TelemetryData.cc</itemPath>
+      <itemPath>VCDException.cc</itemPath>
+      <itemPath>VideoReader.cc</itemPath>
+      <itemPath>VideoWriter.cc</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>GNU</compilerSet>
+        <cRequired>true</cRequired>
+        <cppRequired>true</cppRequired>
+        <fortranRequired>false</fortranRequired>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <ccCompilerTool>
+          <includeDirectories>
+            <directoryPath>/opt/opencv/include/opencv</directoryPath>
+            <directoryPath>/opt/include</directoryPath>
+          </includeDirectories>
+        </ccCompilerTool>
+        <linkerTool>
+          <output>dist/Debug/GNU-Linux-x86/applicationtest_1</output>
+          <linkerAddLib>
+            <directoryPath>/opt/opencv/lib</directoryPath>
+            <directoryPath>/opt/lib</directoryPath>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <directoryPath>/opt/lib</directoryPath>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerLibLibItem>highgui</linkerLibLibItem>
+            <linkerLibLibItem>cv</linkerLibLibItem>
+            <linkerLibLibItem>cvaux</linkerLibLibItem>
+            <linkerLibLibItem>cxcore</linkerLibLibItem>
+            <linkerLibLibItem>db_cxx-4.5</linkerLibLibItem>
+            <linkerLibLibItem>dbxml</linkerLibLibItem>
+            <linkerLibLibItem>db</linkerLibLibItem>
+            <linkerLibLibItem>xqilla</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="Datalogger.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="Datalogger.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="DataloggerRecord.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="DataloggerRecord.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="ImpactPredictor.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="ImpactPredictor.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="RedDotExperiment.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="RedDotExperiment.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="StereoCamera.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="StereoCamera.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="StereoImage.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="StereoImage.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="StereoSampleCode.c">
+        <itemExcluded>true</itemExcluded>
+        <itemTool>0</itemTool>
+      </item>
+      <item path="TelemetryCalculator.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="TelemetryCalculator.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="TelemetryData.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="TelemetryData.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="VCDException.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="VCDException.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="VideoReader.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="VideoReader.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="VideoWriter.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="VideoWriter.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="main.cc">
+        <itemTool>1</itemTool>
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>GNU</compilerSet>
+        <cRequired>true</cRequired>
+        <cppRequired>true</cppRequired>
+        <fortranRequired>false</fortranRequired>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <cCompilerTool>
+          <developmentMode>5</developmentMode>
+        </cCompilerTool>
+        <ccCompilerTool>
+          <developmentMode>5</developmentMode>
+        </ccCompilerTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <linkerTool>
+          <linkerLibItems>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="Datalogger.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="Datalogger.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="DataloggerRecord.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="DataloggerRecord.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="ImpactPredictor.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="ImpactPredictor.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="RedDotExperiment.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="RedDotExperiment.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="StereoCamera.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="StereoCamera.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="StereoImage.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="StereoImage.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="StereoSampleCode.c">
+        <itemTool>0</itemTool>
+      </item>
+      <item path="TelemetryCalculator.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="TelemetryCalculator.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="TelemetryData.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="TelemetryData.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="VCDException.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="VCDException.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="VideoReader.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="VideoReader.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="VideoWriter.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="VideoWriter.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="main.cc">
+        <itemTool>1</itemTool>
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
