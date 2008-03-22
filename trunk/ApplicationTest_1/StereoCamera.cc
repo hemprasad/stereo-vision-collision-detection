@@ -130,7 +130,7 @@ bool StereoCamera::calibrateCamera()
         cvShowImage( "cameraRight", images[1]);
             
         //wait so the pattern can move
-        cvWaitKey(3000);
+        cvWaitKey(7000);
         
     }
     

@@ -34,6 +34,7 @@ public:
     StereoCamera();
     ~StereoCamera();
     
+    //plug in the left camera first. left = video0
     void open();
     void close();
     StereoImage grabFrame();
