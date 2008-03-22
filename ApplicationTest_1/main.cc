@@ -16,6 +16,8 @@
 #include <sstream>
 #include <cstdlib>
 
+#include <unistd.h>
+
 //#include "wx/wx.h"
 
 //#include "dbxml/DbXml.hpp"
@@ -59,7 +61,7 @@ void disparitySlider(int x);
 void predictionTest();
 
 void run();
-void run2();
+void depthTest();
 void singleRun();
 
 
@@ -99,13 +101,15 @@ int main(int argc, char** argv)
     cvNamedWindow( "cameraLeft", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "cameraRight", CV_WINDOW_AUTOSIZE );
      
-    //runCalibration();
+    runCalibration();
     //run2();
     //singleRun();
     
+    //depthTest();
+    
     //dataLoggerTest();
     
-    predictionTest();
+    //predictionTest();
     
     //cBoardTest();
     //showBlendedVideo();
@@ -650,7 +654,8 @@ void writePGMFile(IplImage* image, string filename)
 
     //save image as jpeg
     //imageName << "/home/nick/stereoTestImages/" << filename << ".jpg";
-    imageName << filename << ".jpg";
+    imageName << "/home/nick/NetBeansProjects/ApplicationTest_1/pictures/" << filename << ".jpg";
+    //imageName << filename << ".jpg";
     cvSaveImage(imageName.str().c_str(), image);
 
     //convert to png
@@ -659,7 +664,7 @@ void writePGMFile(IplImage* image, string filename)
     std::system(exe.str().c_str());
 }
 
-void run2()
+void depthTest()
 {
     int pos = 21;
     int param1 = 1;
@@ -671,6 +676,8 @@ void run2()
     char input;
     
     bool quit = false;
+    bool calc = false;
+    bool runBirch = false;
     
     cvNamedWindow( "disparity", CV_WINDOW_AUTOSIZE );
     cvCreateTrackbar("disparitySlider", "disparity", &pos, 255, NULL);
@@ -682,7 +689,7 @@ void run2()
     StereoCamera cam;
     StereoImage image;
     
-    //cam.enableCalibration(true);
+    cam.enableCalibration(true);
     
     cam.open();
     
@@ -706,6 +713,15 @@ void run2()
             case 'd':
                 
                 cam.enableCalibration(false);
+                break;
+                
+            case 'r':
+                
+                calc = true;
+                break;
+                
+            case 'b':
+                runBirch ^= true;
                 
             default:
                 break;
@@ -733,22 +749,30 @@ void run2()
 
         //cvWaitKey(2000);
         
+        //if (calc == false) continue;
+        
         if (disparityFrame != 0) cvReleaseImage(&disparityFrame);
 
-        disparityFrame = calculateDisparity(rightFrame, leftFrame, pos); //runBirchfield(leftFrame, rightFrame); //calculateDisparity(rightFrame, leftFrame, pos);
-
+        if (runBirch)
+        {
+            disparityFrame = runBirchfield(leftFrame, rightFrame); //calculateDisparity(rightFrame, leftFrame, pos);
+        }
+        else
+        {
+            disparityFrame = calculateDisparity(rightFrame, leftFrame, pos); 
+        }
+        
         cvConvertScale(disparityFrame, disparityFrame, 255.f / pos);
 
         //cvSaveImage("disparity.jpg", disparityFrame);*/
         cvShowImage("disparity", disparityFrame);
-        cvShowImage("cameraLeft", leftFrame);
-        cvShowImage("cameraRight", rightFrame);
+        //cvShowImage("cameraLeft", leftFrame);
+        //cvShowImage("cameraRight", rightFrame);
         
+        calc = false;
         
-        //cvWaitKey(50); 
-        
-        //cvReleaseImage(&leftFrame);
-        //cvReleaseImage(&rightFrame);
+        cvWaitKey(1000);
+        //sleep(1000);
     }
     
     cam.close();

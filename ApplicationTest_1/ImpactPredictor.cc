@@ -13,6 +13,7 @@ ImpactPredictor::~ImpactPredictor()
     
 }
 
+//basic calculations based on newtonian physics
 double ImpactPredictor::getTimeToImpact(TelemetryData data)
 {
     double determinant = 0;
