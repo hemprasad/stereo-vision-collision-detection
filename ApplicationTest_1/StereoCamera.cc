@@ -1,5 +1,12 @@
 #include "StereoCamera.h"
 #include <iostream>
+#include <string>
+
+using std::string;
+
+const string CALIB_SAVE_LOCATION = "calib.ini";
+
+///home/nick/calib.ini
 
 
 StereoCamera::StereoCamera()
@@ -118,7 +125,7 @@ bool StereoCamera::calibrateCamera()
             
             if (m_calibFilter.IsCalibrated())
             {
-                m_calibFilter.SaveCameraParams("/home/nick/calib.ini");
+                m_calibFilter.SaveCameraParams(CALIB_SAVE_LOCATION.c_str());
                 return true;
             }
         }
@@ -137,7 +144,7 @@ bool StereoCamera::calibrateCamera()
     if (m_calibFilter.IsCalibrated())
     {
         std::cout << "happened here" << std::endl;
-        m_calibFilter.SaveCameraParams("/home/nick/calib.ini");
+        m_calibFilter.SaveCameraParams(CALIB_SAVE_LOCATION.c_str());
         return true;
     }
     
@@ -152,7 +159,7 @@ void StereoCamera::enableCalibration(bool enable)
     
     if (enable)
     {
-        m_calibFilter.LoadCameraParams("/home/nick/calib.ini");
+        m_calibFilter.LoadCameraParams(CALIB_SAVE_LOCATION.c_str());
         m_calibIsEnabled = true;
     }
     else

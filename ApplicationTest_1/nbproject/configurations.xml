@@ -6,8 +6,10 @@
                    projectFiles="true">
       <itemPath>Datalogger.h</itemPath>
       <itemPath>DataloggerRecord.h</itemPath>
+      <itemPath>HelperFunctions.h</itemPath>
       <itemPath>ImpactPredictor.h</itemPath>
       <itemPath>RedDotExperiment.h</itemPath>
+      <itemPath>squares.h</itemPath>
       <itemPath>TelemetryCalculator.h</itemPath>
       <itemPath>TelemetryData.h</itemPath>
       <itemPath>VCDException.h</itemPath>
@@ -23,9 +25,11 @@
                    projectFiles="true">
       <itemPath>Datalogger.cc</itemPath>
       <itemPath>DataloggerRecord.cc</itemPath>
+      <itemPath>HelperFunctions.cc</itemPath>
       <itemPath>ImpactPredictor.cc</itemPath>
       <itemPath>main.cc</itemPath>
       <itemPath>RedDotExperiment.cc</itemPath>
+      <itemPath>squares.cc</itemPath>
       <itemPath>StereoCamera.cc</itemPath>
       <itemPath>StereoCamera.h</itemPath>
       <itemPath>StereoImage.cc</itemPath>
@@ -78,6 +82,7 @@
             <linkerLibLibItem>dbxml</linkerLibLibItem>
             <linkerLibLibItem>db</linkerLibLibItem>
             <linkerLibLibItem>xqilla</linkerLibLibItem>
+            <linkerLibLibItem>blob</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -91,6 +96,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="DataloggerRecord.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="HelperFunctions.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="HelperFunctions.h">
         <itemTool>3</itemTool>
       </item>
       <item path="ImpactPredictor.cc">
@@ -154,6 +165,12 @@
       <item path="main.cc">
         <itemTool>1</itemTool>
       </item>
+      <item path="squares.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="squares.h">
+        <itemTool>3</itemTool>
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -188,6 +205,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="DataloggerRecord.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="HelperFunctions.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="HelperFunctions.h">
         <itemTool>3</itemTool>
       </item>
       <item path="ImpactPredictor.cc">
@@ -249,6 +272,12 @@
       </item>
       <item path="main.cc">
         <itemTool>1</itemTool>
+      </item>
+      <item path="squares.cc">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="squares.h">
+        <itemTool>3</itemTool>
       </item>
     </conf>
   </confs>
