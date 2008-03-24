@@ -28,6 +28,7 @@
 #include "DataloggerRecord.h"
 #include "Datalogger.h"
 #include "RedDotExperiment.h"
+#include "HelperFunctions.h"
 
 #include "TelemetryCalculator.h"
 #include "TelemetryData.h"
@@ -70,7 +71,7 @@ void dataLoggerTest();
 IplImage* runBirchfield(IplImage* r, IplImage* l);
 
 
-IplImage* convertToBW(IplImage* image);
+//IplImage* convertToBW(IplImage* image);
 void runCalibration();
 
 void writePGMFile(IplImage* image, string filename);
@@ -100,8 +101,10 @@ int main(int argc, char** argv)
     //create the test windows
     cvNamedWindow( "cameraLeft", CV_WINDOW_AUTOSIZE );
     cvNamedWindow( "cameraRight", CV_WINDOW_AUTOSIZE );
+    
+    cvMoveWindow("cameraLeft", 0, 0);
      
-    runCalibration();
+    //runCalibration();
     //run2();
     //singleRun();
     
@@ -114,10 +117,138 @@ int main(int argc, char** argv)
     //cBoardTest();
     //showBlendedVideo();
     
+    camshiftDemo();
+    
     cvDestroyWindow( "cameraLeft" );
     cvDestroyWindow( "cameraRight" );
     
     return (EXIT_SUCCESS);
+}
+
+
+void depthTest()
+{
+    int pos = 21;
+    int param1 = 1;
+    int param2 = 1;
+    int param3 = 1;
+    int param4 = 1;
+    int param5 = 1;
+    //string in = "";
+    char input;
+    
+    bool quit = false;
+    bool calc = false;
+    bool runBirch = false;
+    bool enableCal = false;
+    
+    cvNamedWindow( "disparity", CV_WINDOW_AUTOSIZE );
+    cvCreateTrackbar("disparitySlider", "disparity", &pos, 255, NULL);
+    
+    IplImage* leftFrame = 0;
+    IplImage* rightFrame = 0;
+    IplImage* disparityFrame = 0;
+    
+    StereoCamera cam;
+    StereoImage image;
+    
+    cam.enableCalibration(false);
+    
+    cam.open();
+    
+    while (!quit)
+    {
+        //std::cin >> in;
+        input = cvWaitKey(1000);
+        
+        switch (input)
+        {
+            case 'q':
+                
+                quit = true;
+                break;
+                
+            case 'e':
+                
+                cam.enableCalibration(true);
+                break;
+                
+            case 'd':
+                
+                cam.enableCalibration(false);
+                break;
+                
+            case 'r':
+                
+                calc = true;
+                break;
+                
+            case 'b':
+                runBirch ^= true;
+                
+                break;
+                
+            case 'c':
+                
+                enableCal ^= true;
+                cam.enableCalibration(enableCal);
+                
+                break;
+                
+            default:
+                break;
+        }
+        
+        image = cam.grabFrame();
+    
+        leftFrame = image.getLeftImage();
+        rightFrame = image.getRightImage();
+    
+        leftFrame = convertToBW(image.getLeftImage());
+        rightFrame = convertToBW(image.getRightImage());
+
+        //cvEqualizeHist(leftFrame, leftFrame);
+        //cvEqualizeHist(rightFrame, rightFrame);
+
+        //cvSmooth(leftFrame, leftFrame, CV_BLUR, 3, 3);
+        //cvSmooth(rightFrame, rightFrame, CV_BLUR, 3, 3);
+
+        //cvSaveImage("left_new.jpg", leftFrame);
+        //cvSaveImage("right_new.jpg", rightFrame);
+
+        cvShowImage( "cameraLeft", leftFrame);
+        cvShowImage( "cameraRight", rightFrame);
+
+        //cvWaitKey(2000);
+        
+        //if (calc == false) continue;
+        
+        if (disparityFrame != 0) cvReleaseImage(&disparityFrame);
+
+        if (runBirch)
+        {
+            disparityFrame = runBirchfield(leftFrame, rightFrame); //calculateDisparity(rightFrame, leftFrame, pos);
+        }
+        else
+        {
+            disparityFrame = calculateDisparity(rightFrame, leftFrame, pos); 
+        }
+        
+        cvConvertScale(disparityFrame, disparityFrame, 255.f / pos);
+
+        //cvSaveImage("disparity.jpg", disparityFrame);*/
+        cvShowImage("disparity", disparityFrame);
+        //cvShowImage("cameraLeft", leftFrame);
+        //cvShowImage("cameraRight", rightFrame);
+        
+        calc = false;
+        
+        //cvWaitKey(1000);
+        //sleep(1000);
+    }
+    
+    cam.close();
+    
 }
 
 void run()
@@ -191,7 +322,7 @@ IplImage* calculateDisparity(IplImage* rightImage, IplImage* leftImage, int maxD
     return disparityImage;
 }
 
-IplImage* convertToBW(IplImage* image)
+/*IplImage* convertToBW(IplImage* image)
 {
     IplImage* bwImage = 0;
     
@@ -201,7 +332,7 @@ IplImage* convertToBW(IplImage* image)
     cvCvtColor(image, bwImage, CV_BGR2GRAY);
     
     return bwImage;
-}
+}*/
 
 
 /**
@@ -664,120 +795,6 @@ void writePGMFile(IplImage* image, string filename)
     std::system(exe.str().c_str());
 }
 
-void depthTest()
-{
-    int pos = 21;
-    int param1 = 1;
-    int param2 = 1;
-    int param3 = 1;
-    int param4 = 1;
-    int param5 = 1;
-    //string in = "";
-    char input;
-    
-    bool quit = false;
-    bool calc = false;
-    bool runBirch = false;
-    
-    cvNamedWindow( "disparity", CV_WINDOW_AUTOSIZE );
-    cvCreateTrackbar("disparitySlider", "disparity", &pos, 255, NULL);
-    
-    IplImage* leftFrame = 0;
-    IplImage* rightFrame = 0;
-    IplImage* disparityFrame = 0;
-    
-    StereoCamera cam;
-    StereoImage image;
-    
-    cam.enableCalibration(true);
-    
-    cam.open();
-    
-    while (!quit)
-    {
-        //std::cin >> in;
-        input = cvWaitKey(20);
-        
-        switch (input)
-        {
-            case 'q':
-                
-                quit = true;
-                break;
-                
-            case 'e':
-                
-                cam.enableCalibration(true);
-                break;
-                
-            case 'd':
-                
-                cam.enableCalibration(false);
-                break;
-                
-            case 'r':
-                
-                calc = true;
-                break;
-                
-            case 'b':
-                runBirch ^= true;
-                
-            default:
-                break;
-        }
-        
-        image = cam.grabFrame();
-    
-        leftFrame = image.getLeftImage();
-        rightFrame = image.getRightImage();
-    
-        leftFrame = convertToBW(image.getLeftImage());
-        rightFrame = convertToBW(image.getRightImage());
-
-        //cvEqualizeHist(leftFrame, leftFrame);
-        //cvEqualizeHist(rightFrame, rightFrame);
-
-        //cvSmooth(leftFrame, leftFrame, CV_BLUR, 3, 3);
-        //cvSmooth(rightFrame, rightFrame, CV_BLUR, 3, 3);
-
-        //cvSaveImage("left_new.jpg", leftFrame);
-        //cvSaveImage("right_new.jpg", rightFrame);
-
-        cvShowImage( "cameraLeft", leftFrame);
-        cvShowImage( "cameraRight", rightFrame);
-
-        //cvWaitKey(2000);
-        
-        //if (calc == false) continue;
-        
-        if (disparityFrame != 0) cvReleaseImage(&disparityFrame);
-
-        if (runBirch)
-        {
-            disparityFrame = runBirchfield(leftFrame, rightFrame); //calculateDisparity(rightFrame, leftFrame, pos);
-        }
-        else
-        {
-            disparityFrame = calculateDisparity(rightFrame, leftFrame, pos); 
-        }
-        
-        cvConvertScale(disparityFrame, disparityFrame, 255.f / pos);
-
-        //cvSaveImage("disparity.jpg", disparityFrame);*/
-        cvShowImage("disparity", disparityFrame);
-        //cvShowImage("cameraLeft", leftFrame);
-        //cvShowImage("cameraRight", rightFrame);
-        
-        calc = false;
-        
-        cvWaitKey(1000);
-        //sleep(1000);
-    }
-    
-    cam.close();
-    
-}
 
 void predictionTest()
 {
