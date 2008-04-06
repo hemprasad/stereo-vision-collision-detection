@@ -117,7 +117,8 @@ int main(int argc, char** argv)
     //cBoardTest();
     //showBlendedVideo();
     
-    camshiftDemo();
+    //camshiftDemo();
+    myTrackingDemo();
     
     cvDestroyWindow( "cameraLeft" );
     cvDestroyWindow( "cameraRight" );
