@@ -9,6 +9,15 @@
 #define	_REDDOTEXPERIMENT_H
 
 #include "StereoImage.h"
+#include "BlobResult.h"
+#include "Blob.h"
+
+#include <vector>
+
+using std::vector;
+
+typedef std::vector<CvRect> blobLocations;
+
 
 void cBoardTest();
 
@@ -22,6 +31,12 @@ void mouseRight(int event, int x, int y, int flags, void* param);
 void calcDistance(int xLeft, int xRight);
 
 void camshiftDemo();
+
+void myTrackingDemo();
+
+CBlobResult getBlobs(IplImage* image);
+
+void drawBlob(IplImage* image, CBlob blob);
 
 #endif	/* _REDDOTEXPERIMENT_H */
 

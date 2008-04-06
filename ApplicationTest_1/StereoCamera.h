@@ -40,7 +40,7 @@ public:
     StereoImage grabFrame();
     
     bool calibrateCamera();
-    void enableCalibration(bool enable);    
+    void enableCalibration(bool enable);
     
 };
 
