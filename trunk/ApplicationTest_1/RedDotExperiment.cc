@@ -7,8 +7,6 @@
 #include "StereoCamera.h"
 #include "squares.h"
 
-#include "Blob.h"
-#include "BlobResult.h"
 #include "HelperFunctions.h"
 
 
@@ -48,16 +46,16 @@ void cBoardTest()
             stereoImg = cam.grabFrame();
             
             cvWaitKey(50);
-            cvShowImage("cameraLeft", stereoImg.getLeftImage());
-            cvShowImage("cameraRight", stereoImg.getRightImage());
+            
         }
         
         grabFrame = false;
 
-        //sequence = findSquares4(stereoImg.getLeftImage(), store);
-        //drawSquares(stereoImg.getLeftImage(), sequence);
+        sequence = findSquares4(stereoImg.getLeftImage(), store);
+        drawSquares(stereoImg.getLeftImage(), sequence);
 
-        
+        cvShowImage("cameraLeft", stereoImg.getLeftImage());
+        cvShowImage("cameraRight", stereoImg.getRightImage());
         
            
 
@@ -423,10 +421,10 @@ void camshiftDemo()
             /*My Code Here*/
             
             // get max, and min co-ordinates
-            int iMaxx = (int) (track_box.center.x + (track_box.size.width / 2));
-            int iMinx = (int) (track_box.center.x - (track_box.size.width / 2));
-            int iMaxy = (int) (track_box.center.y + (track_box.size.height / 2));
-            int iMiny = (int) (track_box.center.y - (track_box.size.height / 2));
+            int iMaxx = (int) (track_box.center.x + (track_box.size.width / 2)) + 10;
+            int iMaxy = (int) (track_box.center.y + (track_box.size.height / 2)) + 10;
+            int iMinx = (int) (track_box.center.x - (track_box.size.width / 2)) - 10;
+            int iMiny = (int) (track_box.center.y - (track_box.size.height / 2)) - 10;
             
 //            std::cout << "max x:" << iMaxx << std::endl;
 //            std::cout << "min x:" << iMinx << std::endl;
@@ -537,4 +535,263 @@ void camshiftDemo()
 
     //return 0;
 }
+
+int satMin = 100;
+int satMax = 2000;
+int valMax = 100;
+
+void myTrackingDemo()
+{
+    bool quit = false;
+    //bool isTrackingObject = false;
+    bool objectIsLocked = false;
+    char c;
+    StereoCamera cam;
+    StereoImage stImage;
+    int vMin = 10;
+    int vMax = 20;
+    int slider1 = 173;
+    int slider2 = 131;
+    int slider3 = 157;
+    int hueMin = 0;
+    int hueMax = 0;
+    //int satMin = 100;
+    //int satMax = 2000;
+    int valMin = 0;
+    //int valMax = 100;
+    
+    
+    IplImage* hsv  = 0; 
+    IplImage* hue  = 0;
+    IplImage* mask = 0;
+    
+    CvHistogram *hist = 0;
+    
+    
+    cam.open();
+    
+    stImage = cam.grabFrame();
+    
+    hsv = cvCreateImage( cvGetSize(stImage.getLeftImage()), 8, 3);
+    hue = cvCreateImage( cvGetSize(stImage.getLeftImage()), 8, 1);
+    mask = cvCreateImage( cvGetSize(stImage.getLeftImage()), 8, 1);
+    
+    cvNamedWindow("hue", CV_WINDOW_AUTOSIZE);
+    
+    cvCreateTrackbar("Hmin", "cameraLeft", &hueMin, 360, NULL);
+    cvCreateTrackbar("Hmax", "cameraLeft", &hueMax, 360, NULL);
+    cvCreateTrackbar("Smin", "cameraLeft", &satMin, 2000, NULL);
+    cvCreateTrackbar("Smax", "cameraLeft", &satMax, 2000, NULL);
+    cvCreateTrackbar("Vmin", "cameraLeft", &valMin, 2000, NULL);
+    cvCreateTrackbar("Vmax", "cameraLeft", &valMax, 2000, NULL);
+    
+    
+//    CBlobResult res;
+//    CBlob blob;
+//    IplImage* blobImage = 0;
+    
+    CBlobResult rightBlobs;
+    CBlobResult leftBlobs;
+    
+    
+    
+    for (;;)
+    {
+    
+        c = (char) cvWaitKey(2000);
+        
+        switch (c)
+        {
+            case 'q':
+                quit = true;
+                break;
+                
+            default:
+                break;
+            
+        }
+        
+        if (quit) break;
+        
+        stImage = cam.grabFrame();
+        
+        
+        
+        //search for the traacking object
+        //while (!objectIsLocked)
+        //{
+            //create the HSV image
+            cvCvtColor( stImage.getLeftImage(), hsv, CV_BGR2HSV );
+
+
+            //determine the colors of interest
+            //cvInRangeS( hsv, cvScalar(0, slider1, slider2, 0),
+            //                cvScalar(180, 256, slider3, 0), mask);
+
+            //cvInRangeS( hsv, cvScalar(0, slider1, slider2, 0),
+            //                 cvScalar(180, 256, slider3, 0), mask);
+
+            //extract the hue colour plane out of the plane
+            //cvSplit( hsv, hue, 0, 0, 0 );
+            
+            cvInRangeS( hsv, cvScalar(hueMin, satMin, valMin, 0),
+                             cvScalar(hueMax, satMax, valMax, 0), mask);
+            
+            
+            //for an rgb image
+            cvInRangeS( stImage.getRightImage(), cvScalar(hueMin, satMin, valMin, 0),
+                             cvScalar(hueMax, satMax, valMax, 0), hue);
+            
+        //}
+        
+        //track the object
+        
+       
+
+//        if (blobImage != 0) cvReleaseImage(&blobImage);
+//
+//        blobImage = convertToBW(stImage.getLeftImage());
+//
+//        //cvSetImageROI(blobImage, rect);
+//
+//        res = CBlobResult(blobImage, NULL, valMax, true);
+//
+//        //cvResetImageROI(blobImage);
+//
+//        res.Filter( res, B_INCLUDE, CBlobGetArea(), B_LESS_OR_EQUAL, satMax );// area <150
+//        //res.Filter( res, B_INCLUDE, CBlobGetArea(), B_GREATER, 0 );// area <150
+//        res.Filter( res, B_INCLUDE, CBlobGetArea(), B_GREATER_OR_EQUAL, satMin );
+//
+//        std::cout << "blob count:" << res.GetNumBlobs() << std::endl;
+
+//        for (int i = 0; i < res.GetNumBlobs(); i++)
+//        {
+//            blob = res.GetBlob(i);
+//
+//            // get max, and min co-ordinates
+//            int blobiMaxx = (int) blob.MaxX();
+//            int blobiMinx = (int) blob.MinX();
+//            int blobiMaxy = (int) blob.MaxY();
+//            int blobiMiny = (int) blob.MinY();
+//
+//            // find the average of the blob (i.e. estimate its centre)
+//            //int blobiMeanx=(iMinx+iMaxx)/2;
+//            //int blobiMeany=(iMiny+iMaxy)/2;
+//            
+//            // mark centre
+//            //cvLine( blobImage, cvPoint(blobiMeanx, blobiMeany), cvPoint(blobiMeanx, blobiMeany), CV_RGB(255, 0 , 0), 4, 8, 0 );
+//            
+//            // mark box around blob
+//            cvRectangle(blobImage, cvPoint(blobiMinx , blobiMiny ), cvPoint ( blobiMaxx, blobiMaxy ), CV_RGB(0, 0, 0), 2, 8, 0);
+//
+//            //blob.FillBlob(blobImage, CV_RGB(0, 0, 0));
+//        }
+
+        //cvShowImage("hue", mask);
+            
+        rightBlobs = getBlobs(stImage.getRightImage());
+        leftBlobs = getBlobs(stImage.getLeftImage());
+        
+//        for (int i = 0; i < rightBlobs.GetNumBlobs(); i++)
+//        {
+//            // mark box around blob
+//            //cvRectangle(stImage.getRightImage(), cvPoint(i->x , i->y), cvPoint(i->x + i->width , i->y + i->height), CV_RGB(0, 0, 0), 2, 8, 0);    
+//            drawBlob(stImage.getRightImage(), rightBlobs.GetBlob(i));
+//        }
+//        
+//        for (int i = 0; i < leftBlobs.GetNumBlobs(); i++)
+//        {
+//            // mark box around blob
+//            //cvRectangle(stImage.getLeftImage(), cvPoint(i->x , i->y), cvPoint(i->x + i->width , i->y + i->height), CV_RGB(0, 0, 0), 2, 8, 0);
+//            drawBlob(stImage.getLeftImage(), leftBlobs.GetBlob(i));
+//        }
+        
+        CBlob searchBlob;
+        double areaPos;
+        double areaNeg;
+        
+        for (int i = 0; i < rightBlobs.GetNumBlobs(); i++)
+        {
+            searchBlob = rightBlobs.GetBlob(i);
+            
+            for (int j = 0; j < leftBlobs.GetNumBlobs(); j++)
+            {
+                //This is pretty simple and a work in progress. I want to add histogram comparison
+                //into the equation
+                //+ or - 5% of area
+                areaPos = leftBlobs.GetBlob(j).Area() + (leftBlobs.GetBlob(j).Area() * 0.02);
+                areaNeg = leftBlobs.GetBlob(j).Area() - (leftBlobs.GetBlob(j).Area() * 0.02);
+                
+                if ((areaNeg <= searchBlob.Area()) &&  (searchBlob.Area() <= areaPos))
+                {
+                    //match found
+                    drawBlob(stImage.getRightImage(), searchBlob);
+                    drawBlob(stImage.getLeftImage(), leftBlobs.GetBlob(j));
+                    
+                    leftBlobs.GetBlob(j).FillBlob(stImage.getLeftImage(), CV_RGB(5*i, 0, 0));
+                    searchBlob.FillBlob(stImage.getRightImage(), CV_RGB(5*i, 0, 0));
+                    
+                    std::cout << "blob:" << i << std::endl;
+                    calcDistance((int) leftBlobs.GetBlob(j).MinX(), (int) searchBlob.MinX());
+                    
+                    break;                    
+                }
+            }
+            
+        }
+
+        //cvShowImage( "cameraLeft", hsv);
+        //cvShowImage( "cameraRight", blobImage);
+        //cvShowImage( "hue", mask);
+        
+        cvShowImage( "cameraLeft", stImage.getLeftImage());
+        cvShowImage( "cameraRight", stImage.getLeftImage());
+        
+        
+    
+    }
+    
+    cvDestroyWindow("hue");
+    
+    cam.close();
+}
+
+CBlobResult getBlobs(IplImage* image)
+{
+    CBlobResult res;
+    CBlob blob;
+    IplImage* blobImage = 0;
+    blobLocations locs;
+    CvRect rec;
+    
+
+    blobImage = convertToBW(image);
+
+    //cvSetImageROI(blobImage, rect);
+
+    res = CBlobResult(blobImage, NULL, valMax, true);
+
+    //cvResetImageROI(blobImage);
+
+    res.Filter( res, B_INCLUDE, CBlobGetArea(), B_LESS_OR_EQUAL, satMax );// area <150
+    //res.Filter( res, B_INCLUDE, CBlobGetArea(), B_GREATER, 0 );// area <150
+    res.Filter( res, B_INCLUDE, CBlobGetArea(), B_GREATER_OR_EQUAL, satMin );
+    
+    cvReleaseImage(&blobImage);
+    
+    return res;
+
+    //std::cout << "blob count:" << res.GetNumBlobs() << std::endl;
+    
+    
+    
+}
+
+void drawBlob(IplImage* image, CBlob blob)
+{
+    
+    cvRectangle(image, cvPoint((int) blob.MinX(), (int) blob.MinY()), 
+                       cvPoint((int) blob.MaxX(), (int) blob.MaxY()), CV_RGB(0, 0, 0), 2, 8, 0);    
+}
+
 
